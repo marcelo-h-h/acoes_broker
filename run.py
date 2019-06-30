@@ -1,4 +1,5 @@
 import devices
+import data.stocks
 from multiprocessing import Process
 
 
@@ -13,21 +14,24 @@ def start_server(front_port: int, stock: str, stock_value: float):
         front_port, stock, stock_value))
     p.start()
 
-def start_sub(back_port: int, stock: str):
+def start_sub(back_port: int, stock: str, monitor_port: int):
     p = Process(target=devices.start_new_sub, args=(
-        back_port, stock))
+        back_port, stock, monitor_port))
     p.start()
 
-
+def start_monitor(monitor_port: int):
+    p = Process(target=devices.start_new_monitor, args=(
+        monitor_port,))
+    p.start()
 
 def main():
     start_broker(8008, 8808)
-    for i in range(0,9):
-        start_server(8008, 'BRL', 100%(i+60))
-        start_server(8008, 'EUR', 100%(i+30))
+    for value in data.stocks.return_stocks():
+        start_server(8008, value, data.stocks.return_stocks()[value])
+    for value in data.stocks.return_stocks():
+        start_sub(8808, value, 8070)
+    start_monitor(8070)
 
-    start_sub(8808, 'BRL')
-    start_sub(8808, 'EUR')
 
 
 if __name__ == '__main__':

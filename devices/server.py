@@ -1,6 +1,5 @@
 import zmq
 import random
-import sys
 import time
 
 class Server():
@@ -16,9 +15,9 @@ class Server():
         try:
             while True:
                 negative = -1 if random.random()>=0.5 else 1
-                variation = random.random() * 0.1 * negative
+                variation = random.random() * 0.01 * negative
                 self._value += self._value * variation
-                messagedata = "Stock:%s" % self._stock + "-Value:%i" %self._value + "-%f" %variation
+                messagedata = "Stock:%s" % self._stock + "_Value:%f" %self._value + "_Variation:%f" %(variation*100) +"%"
                 #print ("%s %s" % (self._stock, messagedata))
                 self._socket.send_string("%s %s" % (self._stock, messagedata))
                 time.sleep(1)
