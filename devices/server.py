@@ -23,9 +23,11 @@ class Server():
                 self._socket.send_string("%s %s" % (self._stock, messagedata))
                 time.sleep(1)
 
-        except KeyboardInterrupt:
-            self._context.term()
+        except:
             print('Shutting down server')
+        finally:
+            self._socket.close()
+            self._context.term()
 
 def start_new_server(front_port: int, stock: str, stock_value: float):
     s = Server(front_port, stock, stock_value)
