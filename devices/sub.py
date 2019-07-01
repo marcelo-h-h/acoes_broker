@@ -24,7 +24,6 @@ class Subscriber():
                 string = self._socket.recv()
                 topic, messagedata = string.split()
                 self._push_socket.send(messagedata)
-                print ((str(messagedata, "utf-8")).replace("_", " "))
         
         except:
             print('Shutting down sub')
