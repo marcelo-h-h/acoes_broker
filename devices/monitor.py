@@ -7,14 +7,15 @@ class Monitor():
         port = str(monitor_port)
         self._context = zmq.Context()
         self._receiver = self._context.socket(zmq.PULL)
-        self._receiver.connect("tcp://localhot:%s" % port)
+        self._receiver.bind("tcp://*:%s" % port)
         self._stocks = {}
-        print('Starting monitor...')
+        #print("Starting monitor listening at tcp://localhot:%s" % port)
 
     def run(self):
         try:
             while True:
-                msg = self._receiver.recv()
+                msg = self._receiver.recv_string()
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 stock, value, variation = msg.split("_")
                 _value_str, value = value.split(':')
                 value = float(value)
@@ -32,7 +33,8 @@ class Monitor():
                 print(self._stocks)
                 time.sleep(1)
 
-        except:
+        except Exception as e:
+            print(str(e))
             print('Shutting down monitor')
         finally:
             self._receiver.close()

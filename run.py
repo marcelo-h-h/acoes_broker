@@ -26,11 +26,12 @@ def start_monitor(monitor_port: int):
 
 def main():
     start_broker(8008, 8808)
+    start_monitor(8070)
     for value in data.stocks.return_stocks():
         start_server(8008, value, data.stocks.return_stocks()[value])
     for value in data.stocks.return_stocks():
         start_sub(8808, value, 8070)
-    start_monitor(8070)
+ 
 
 
 
