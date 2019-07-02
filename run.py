@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import devices
 import data.stocks
 from multiprocessing import Process
