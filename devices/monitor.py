@@ -1,5 +1,6 @@
 import zmq
 import time
+import pprint
 
 
 class Monitor():
@@ -15,10 +16,10 @@ class Monitor():
         try:
             while True:
                 msg = self._receiver.recv_string()
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 stock, value, variation = msg.split("_")
                 _value_str, value = value.split(':')
                 value = float(value)
+                print(stock)
                 if stock in self._stocks:
                     self._stocks[stock]['curr_value'] = value
                     if self._stocks[stock]['high_value'] < value:
@@ -26,16 +27,17 @@ class Monitor():
                     if self._stocks[stock]['low_value'] > value:
                         self._stocks[stock]['low_value'] = value
                 else:
+                    self._stocks[stock] = {}
                     self._stocks[stock]['curr_value'] = value
                     self._stocks[stock]['high_value'] = value
                     self._stocks[stock]['low_value'] = value
                 print('Stocks:')
-                print(self._stocks)
-                time.sleep(1)
+                pprint.pprint(self._stocks)
+                
 
         except Exception as e:
             print(str(e))
-            print('Shutting down monitor')
+            print('Shutting down monitor with errors')
         finally:
             self._receiver.close()
             self._context.term()
