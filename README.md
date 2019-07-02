@@ -10,3 +10,8 @@
 
 #### Currently working with 20 different stock types
 #### The system model can be seen in the model_scheme.jpeg file
+
+
+To run ensure that you have the `zmq` lib and then, use:
+
+ `python run.py` 
